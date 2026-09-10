@@ -1,0 +1,3514 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,user-scalable=no">
+
+<title>Nông Trại Mây Xanh</title>
+
+<style>
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#9fe5fa;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            to bottom,
+            #8edcf7 0%,
+            #c9f1ff 37%,
+            #e9faff 47%,
+            #b9e895 48%,
+            #8bd66b 100%
+        );
+}
+
+
+/* =========================
+   BẦU TRỜI
+========================= */
+
+.sun{
+    position:absolute;
+
+    width:82px;
+    height:82px;
+
+    right:22px;
+    top:105px;
+
+    border-radius:50%;
+
+    background:#ffe98a;
+
+    box-shadow:none;
+
+    opacity:.9;
+
+    z-index:1;
+}
+
+
+.cloud{
+    position:absolute;
+
+    background:rgba(255,255,255,.72);
+
+    border-radius:100px;
+
+    z-index:2;
+
+    animation:none;
+}
+
+.cloud:before,
+.cloud:after{
+    content:"";
+
+    position:absolute;
+
+    background:inherit;
+
+    border-radius:50%;
+}
+
+.cloud:before{
+    width:60px;
+    height:60px;
+
+    left:35px;
+    bottom:15px;
+}
+
+.cloud:after{
+    width:80px;
+    height:80px;
+
+    right:35px;
+    bottom:5px;
+}
+
+.c1{
+    width:210px;
+    height:50px;
+
+    left:4%;
+    top:135px;
+}
+
+.c2{
+    width:240px;
+    height:55px;
+
+    right:3%;
+    top:210px;
+}
+
+.c3{
+    width:180px;
+    height:45px;
+
+    left:35%;
+    top:310px;
+
+    opacity:.5;
+}
+
+
+/* =========================
+   ĐỒI XA
+========================= */
+
+.hillBack{
+    position:absolute;
+
+    left:-20%;
+    bottom:43%;
+
+    width:140%;
+    height:180px;
+
+    background:#a8df91;
+
+    border-radius:
+        50% 50% 0 0 /
+        100% 100% 0 0;
+
+    opacity:1;
+
+    z-index:3;
+}
+
+
+/* =========================
+   ĐỒI GẦN
+========================= */
+
+.hillFront{
+    position:absolute;
+
+    left:-25%;
+    bottom:35%;
+
+    width:150%;
+    height:150px;
+
+    background:#8bd46e;
+
+    border-radius:
+        50% 50% 0 0 /
+        100% 100% 0 0;
+
+    opacity:1;
+
+    z-index:4;
+}
+
+
+/* =========================
+   MẶT CỎ
+========================= */
+
+.grassGround{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:58%;
+
+    background-color:#82d467;
+
+    background-image:
+        repeating-linear-gradient(
+            45deg,
+            transparent 0px,
+            transparent 30px,
+            rgba(255,255,255,.035) 30px,
+            rgba(255,255,255,.035) 32px
+        );
+
+    z-index:5;
+}
+
+
+/* =========================
+   CÂY TRANG TRÍ
+========================= */
+
+.tree{
+    position:absolute;
+
+    z-index:7;
+
+    font-size:48px;
+
+    filter:none;
+
+    text-shadow:
+        0 3px 0 rgba(50,90,40,.18);
+}
+
+.t1{
+    left:3%;
+    bottom:29%;
+}
+
+.t2{
+    right:2%;
+    bottom:28%;
+    font-size:55px;
+}
+
+.t3{
+    left:15%;
+    bottom:17%;
+    font-size:38px;
+}
+
+.t4{
+    right:15%;
+    bottom:14%;
+    font-size:42px;
+}
+
+.grass{
+    position:absolute;
+
+    color:#4f9e50;
+
+    font-size:24px;
+
+    z-index:7;
+
+    opacity:.85;
+
+    text-shadow:
+        0 2px 0 rgba(50,100,45,.15);
+}
+
+.g1{left:5%;bottom:31%}
+.g2{left:12%;bottom:18%}
+.g3{left:87%;bottom:29%}
+.g4{right:5%;bottom:15%}
+.g5{left:23%;bottom:12%}
+.g6{right:25%;bottom:17%}
+
+
+/* =========================
+   ĐÁ
+========================= */
+
+.rock{
+    position:absolute;
+
+    width:32px;
+    height:19px;
+
+    background:#82918a;
+
+    border-radius:
+        60% 45% 55% 40%;
+
+    box-shadow:
+        inset -3px -3px 0 rgba(0,0,0,.10);
+
+    z-index:7;
+}
+
+.r1{
+    left:7%;
+    bottom:24%;
+    transform:rotate(-12deg);
+}
+
+.r2{
+    right:8%;
+    bottom:22%;
+    transform:rotate(15deg) scale(.8);
+}
+
+.r3{
+    left:18%;
+    bottom:9%;
+    transform:scale(.65);
+}
+
+
+/* =========================
+   KHU ĐẤT NÔNG TRẠI
+========================= */
+
+.island{
+    position:absolute;
+
+    width:520px;
+    height:540px;
+
+    left:50%;
+    top:53%;
+
+    transform:
+        translate(-50%,-45%);
+
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #b9824a 0px,
+            #b9824a 18px,
+            #ad7642 19px,
+            #ad7642 21px
+        );
+
+    clip-path:none;
+
+    border-radius:
+        42% 42% 35% 35%;
+
+    filter:none;
+
+    box-shadow:
+        0 10px 0 rgba(91,132,57,.25);
+
+    z-index:10;
+}
+
+.island::after{
+    display:none;
+}
+
+
+/* =========================
+   HÀNG RÀO
+========================= */
+
+.fence{
+    position:absolute;
+
+    height:20px;
+    width:170px;
+
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #8b572f 0 13px,
+            #c98245 13px 22px
+        );
+
+    border:4px solid #704327;
+
+    border-radius:7px;
+
+    box-shadow:
+        0 3px 0 rgba(70,45,25,.25);
+}
+
+.f1{
+    left:55px;
+    top:105px;
+
+    width:170px;
+
+    transform:rotate(-8deg);
+}
+
+.f2{
+    right:45px;
+    top:155px;
+
+    width:170px;
+
+    transform:rotate(8deg);
+}
+
+.f3{
+    left:105px;
+    top:115px;
+
+    width:120px;
+
+    transform:rotate(-90deg);
+}
+
+
+/* =========================
+   RUỘNG 16 Ô
+========================= */
+
+#farm{
+    position:absolute;
+
+    width:380px;
+    height:380px;
+
+    left:50%;
+    top:51%;
+
+    transform:
+        translate(-50%,-48%);
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,72px);
+
+    grid-template-rows:
+        repeat(4,72px);
+
+    gap:10px;
+
+    justify-content:center;
+    align-content:center;
+
+    z-index:20;
+}
+
+
+/* =========================
+   Ô ĐẤT
+========================= */
+
+.plot{
+    width:72px;
+    height:72px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #805039,
+            #694029
+        );
+
+    border-radius:15px;
+
+    border:
+        3px solid
+        rgba(255,255,255,.06);
+
+    box-shadow:
+        0 5px 0 #573421;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    position:relative;
+
+    cursor:pointer;
+}
+
+.plot:active{
+    transform:scale(.97);
+}
+
+.crop{
+    font-size:32px;
+
+    line-height:1;
+
+    pointer-events:none;
+
+    filter:none;
+}
+
+.growingText{
+    position:absolute;
+
+    bottom:-17px;
+
+    background:#4c3527;
+
+    color:white;
+
+    font-size:10px;
+
+    padding:3px 7px;
+
+    border-radius:12px;
+
+    white-space:nowrap;
+
+    pointer-events:none;
+}
+
+.plot.ready{
+    box-shadow:
+        0 5px 0 #633a27,
+        0 0 0 3px #f2cf58;
+}
+
+
+/* =========================
+   THANH CẤP
+========================= */
+
+.levelBox{
+    position:absolute;
+
+    z-index:50;
+
+    left:15px;
+    top:16px;
+
+    width:300px;
+    height:86px;
+
+    background:rgba(255,255,255,.94);
+
+    border:2px solid white;
+
+    border-radius:22px;
+
+    box-shadow:
+        0 7px 22px rgba(0,0,0,.12);
+
+    display:flex;
+
+    align-items:center;
+
+    padding:10px 13px;
+}
+
+.levelIcon{
+    width:48px;
+    height:48px;
+
+    flex-shrink:0;
+
+    border-radius:50%;
+
+    background:#ffd5e1;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:26px;
+
+    margin-right:10px;
+}
+
+.levelText{
+    flex:1;
+    min-width:0;
+
+    cursor:pointer;
+}
+
+.levelTitle{
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#514642;
+}
+
+.levelNumber{
+    margin-top:2px;
+
+    font-size:13px;
+
+    color:#777;
+}
+
+.xpBack{
+    width:100%;
+    height:8px;
+
+    margin-top:5px;
+
+    background:#c9c9c9;
+
+    border-radius:20px;
+
+    overflow:hidden;
+}
+
+#xpBar{
+    width:0%;
+    height:100%;
+
+    background:#f0c84a;
+
+    transition:.3s;
+}
+
+
+/* =========================
+   XU
+========================= */
+
+.coinBox{
+    position:absolute;
+
+    z-index:50;
+
+    top:19px;
+    right:12px;
+
+    min-width:100px;
+    height:48px;
+
+    padding:0 14px;
+
+    background:rgba(255,255,255,.94);
+
+    border-radius:28px;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.12);
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:#645038;
+}
+
+
+/* =========================
+   POPUP EXP
+========================= */
+
+#levelInfo{
+    position:absolute;
+
+    z-index:300;
+
+    left:15px;
+    top:108px;
+
+    width:300px;
+
+    padding:13px 15px;
+
+    background:rgba(255,255,255,.98);
+
+    border-radius:18px;
+
+    box-shadow:
+        0 9px 28px rgba(0,0,0,.2);
+
+    display:none;
+}
+
+#levelInfo.show{
+    display:block;
+}
+
+.levelInfoTitle{
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#51443d;
+
+    margin-bottom:5px;
+}
+
+.levelInfoText{
+    font-size:13px;
+
+    color:#6d625c;
+
+    line-height:19px;
+}
+
+
+/* =========================
+   TIMER
+========================= */
+
+#growInfo{
+    position:absolute;
+
+    z-index:150;
+
+    width:270px;
+
+    padding:13px 16px;
+
+    background:rgba(255,255,255,.97);
+
+    border-radius:19px;
+
+    box-shadow:
+        0 8px 28px rgba(0,0,0,.18);
+
+    text-align:center;
+
+    display:none;
+
+    pointer-events:none;
+}
+
+#growInfo.show{
+    display:block;
+}
+
+.growTitle{
+    font-size:16px;
+
+    font-weight:bold;
+
+    color:#55483e;
+}
+
+#growTime{
+    margin-top:4px;
+
+    font-size:14px;
+
+    color:#777;
+}
+
+.progressBack{
+    width:100%;
+    height:9px;
+
+    background:#d2d0c9;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-top:8px;
+}
+
+#growProgress{
+    width:0%;
+    height:100%;
+
+    background:#f0c64a;
+}
+
+
+/* =========================
+   NHIỆM VỤ
+========================= */
+
+.quest{
+    position:absolute;
+
+    z-index:80;
+
+    left:12px;
+    bottom:13px;
+
+    width:calc(100vw - 180px);
+
+    max-width:330px;
+
+    min-height:62px;
+
+    background:#68492f;
+
+    color:white;
+
+    border-radius:18px;
+
+    padding:9px 12px;
+
+    box-shadow:
+        0 5px 15px rgba(0,0,0,.18);
+
+    cursor:pointer;
+}
+
+.quest.completed{
+    box-shadow:
+        0 0 0 3px #f2ca4e,
+        0 5px 15px rgba(0,0,0,.18);
+}
+
+.questTitle{
+    font-size:13px;
+
+    font-weight:bold;
+
+    line-height:17px;
+}
+
+.questProgress{
+    font-size:12px;
+
+    margin-top:2px;
+}
+
+.questReward{
+    font-size:10px;
+
+    color:#ffe59b;
+
+    margin-top:2px;
+}
+
+
+/* =========================
+   NÚT
+========================= */
+
+.actions{
+    position:absolute;
+
+    z-index:90;
+
+    right:8px;
+    bottom:13px;
+
+    display:flex;
+
+    gap:5px;
+
+    align-items:center;
+}
+
+.actionBtn{
+    width:46px;
+    height:46px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.94);
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,.16);
+
+    font-size:20px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:0;
+
+    cursor:pointer;
+}
+
+
+/* =========================
+   KHO
+========================= */
+
+#inventory{
+    position:absolute;
+
+    z-index:220;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:320px;
+
+    max-height:78vh;
+
+    padding:16px;
+
+    background:rgba(255,255,255,.98);
+
+    border-radius:22px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.3);
+
+    display:none;
+
+    overflow-y:auto;
+}
+
+#inventory.show{
+    display:block;
+}
+
+.inventoryHeader{
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:10px;
+}
+
+.inventoryHeader h3{
+    margin:0;
+
+    font-size:20px;
+
+    color:#51443d;
+}
+
+.closeBtn{
+    border:0;
+
+    width:32px;
+    height:32px;
+
+    border-radius:50%;
+
+    background:#eee;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+
+/* =========================
+   CHỌN HẠT
+========================= */
+
+.seedTitle{
+    font-size:15px;
+
+    font-weight:bold;
+
+    color:#62544b;
+
+    margin:
+        5px 0 7px;
+}
+
+.seedChoice{
+    width:100%;
+
+    padding:10px;
+
+    margin:5px 0;
+
+    border:2px solid transparent;
+
+    border-radius:13px;
+
+    background:#edf5df;
+
+    text-align:left;
+
+    font-size:13px;
+
+    cursor:pointer;
+}
+
+.seedChoice.selected{
+    border-color:#efc84d;
+
+    background:#fff0b5;
+}
+
+.seedChoice.locked{
+    opacity:.45;
+}
+
+.seedChoice b{
+    float:right;
+}
+
+
+/* =========================
+   NÔNG SẢN TRONG KHO
+========================= */
+
+.productTitle{
+    font-size:15px;
+
+    font-weight:bold;
+
+    color:#62544b;
+
+    margin:
+        15px 0 7px;
+}
+
+.productItem{
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    padding:9px;
+
+    margin:6px 0;
+
+    background:#edf5df;
+
+    border-radius:14px;
+}
+
+.productEmoji{
+    width:43px;
+    height:43px;
+
+    flex-shrink:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:28px;
+
+    background:white;
+
+    border-radius:11px;
+}
+
+.productInfo{
+    flex:1;
+
+    min-width:0;
+}
+
+.productName{
+    font-weight:bold;
+
+    color:#51443d;
+
+    font-size:13px;
+}
+
+.productCount{
+    font-size:11px;
+
+    color:#777;
+
+    margin-top:2px;
+}
+
+.sellBtn{
+    border:0;
+
+    background:#f3ca4c;
+
+    color:#5d4720;
+
+    font-weight:bold;
+
+    border-radius:11px;
+
+    padding:8px 10px;
+
+    cursor:pointer;
+}
+
+.sellBtn:disabled{
+    opacity:.4;
+}
+
+
+/* =========================
+   CỬA HÀNG
+========================= */
+
+#shop{
+    position:absolute;
+
+    z-index:210;
+
+    left:50%;
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:290px;
+
+    padding:17px;
+
+    background:white;
+
+    border-radius:20px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.3);
+
+    display:none;
+}
+
+#shop.show{
+    display:block;
+}
+
+#shop h3{
+    margin:0 0 10px;
+
+    font-size:20px;
+}
+
+.shopItem{
+    width:100%;
+
+    padding:12px;
+
+    margin:5px 0;
+
+    border:0;
+
+    border-radius:12px;
+
+    background:#eaf5d9;
+
+    font-size:14px;
+
+    text-align:left;
+
+    cursor:pointer;
+}
+
+.shopItem.locked{
+    opacity:.45;
+}
+
+.shopItem b{
+    float:right;
+}
+
+
+/* =========================
+   THÔNG BÁO
+========================= */
+
+#message{
+    position:absolute;
+
+    z-index:500;
+
+    left:50%;
+    bottom:75px;
+
+    transform:translateX(-50%);
+
+    background:#4c3829;
+
+    color:white;
+
+    padding:9px 16px;
+
+    border-radius:18px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+    white-space:nowrap;
+
+    font-size:13px;
+}
+
+#message.show{
+    opacity:1;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:600px){
+
+    .levelBox{
+        left:12px;
+        top:15px;
+
+        width:300px;
+        height:82px;
+    }
+
+    .levelTitle{
+        font-size:19px;
+    }
+
+    .levelNumber{
+        font-size:12px;
+    }
+
+    .coinBox{
+        right:9px;
+        top:18px;
+
+        min-width:92px;
+        height:46px;
+    }
+
+    .island{
+        width:520px;
+        height:540px;
+    }
+
+    #farm{
+        width:380px;
+        height:380px;
+
+        grid-template-columns:
+            repeat(4,72px);
+
+        grid-template-rows:
+            repeat(4,72px);
+
+        gap:10px;
+    }
+
+    .plot{
+        width:72px;
+        height:72px;
+    }
+
+    .quest{
+        left:10px;
+        bottom:12px;
+
+        width:
+            calc(100vw - 176px);
+    }
+
+    .actions{
+        right:7px;
+        bottom:12px;
+    }
+
+    .actionBtn{
+        width:45px;
+        height:45px;
+    }
+
+    .tree{
+        font-size:38px;
+    }
+
+    .t2{
+        font-size:43px;
+    }
+
+    #levelInfo{
+        left:12px;
+        top:103px;
+
+        width:300px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div id="game">
+
+
+<!-- =========================
+     BACKGROUND
+========================= -->
+
+<div class="sun"></div>
+
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+<div class="cloud c3"></div>
+
+<div class="hillBack"></div>
+<div class="hillFront"></div>
+
+<div class="grassGround"></div>
+
+<div class="tree t1">🌳</div>
+<div class="tree t2">🌳</div>
+<div class="tree t3">🌲</div>
+<div class="tree t4">🌲</div>
+
+<div class="grass g1">🌿</div>
+<div class="grass g2">🌱</div>
+<div class="grass g3">🌿</div>
+<div class="grass g4">🌱</div>
+<div class="grass g5">🌿</div>
+<div class="grass g6">🌱</div>
+
+<div class="rock r1"></div>
+<div class="rock r2"></div>
+<div class="rock r3"></div>
+
+
+<!-- =========================
+     CẤP + EXP
+========================= -->
+
+<div class="levelBox"
+     id="levelBox">
+
+    <div class="levelIcon">
+        🌸
+    </div>
+
+    <div class="levelText">
+
+        <div class="levelTitle">
+            Trang trại
+        </div>
+
+        <div class="levelNumber">
+            Cấp <span id="level">1</span>
+            · EXP
+            <span id="expText">0</span>/<span id="nextExp">100</span>
+        </div>
+
+        <div class="xpBack">
+            <div id="xpBar"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     THÔNG TIN CẤP
+========================= -->
+
+<div id="levelInfo">
+
+    <div class="levelInfoTitle"
+         id="levelInfoTitle">
+
+        ⬆️ Cấp tiếp theo
+
+    </div>
+
+    <div class="levelInfoText"
+         id="levelInfoText">
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     XU
+========================= -->
+
+<div class="coinBox">
+
+    🪙 <span id="coins">100</span>
+
+</div>
+
+
+<!-- =========================
+     ĐẢO
+========================= -->
+
+<div class="island">
+
+    <div class="fence f1"></div>
+    <div class="fence f2"></div>
+    <div class="fence f3"></div>
+
+    <div id="farm"></div>
+
+</div>
+
+
+<!-- =========================
+     TIMER
+========================= -->
+
+<div id="growInfo">
+
+    <div class="growTitle"
+         id="growTitle">
+
+        🌱 Cây đang mọc
+
+    </div>
+
+    <div id="growTime">
+        Còn 0 giây
+    </div>
+
+    <div class="progressBack">
+
+        <div id="growProgress"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     KHO
+========================= -->
+
+<div id="inventory">
+
+    <div class="inventoryHeader">
+
+        <h3>📦 Kho nông trại</h3>
+
+        <button
+            class="closeBtn"
+            id="inventoryClose">
+
+            ✕
+
+        </button>
+
+    </div>
+
+
+    <div class="seedTitle">
+        🌱 Chọn hạt giống để trồng
+    </div>
+
+
+    <button
+        class="seedChoice selected"
+        data-seed="wheat">
+
+        🌾 Cây lúa mì
+
+        <b>
+            <span id="wheatSeed">10</span>
+        </b>
+
+    </button>
+
+
+    <button
+        class="seedChoice"
+        data-seed="tulip">
+
+        🌷 Hoa tulip hồng
+
+        <b>
+            <span id="tulipSeed">0</span>
+        </b>
+
+    </button>
+
+
+    <button
+        class="seedChoice"
+        data-seed="fern">
+
+        🌿 Cây dương sỉ
+
+        <b>
+            <span id="fernSeed">0</span>
+        </b>
+
+    </button>
+
+
+    <button
+        class="seedChoice"
+        data-seed="apple">
+
+        🌳 Cây táo
+
+        <b>
+            <span id="appleSeed">0</span>
+        </b>
+
+    </button>
+
+
+    <div class="productTitle">
+        📦 Nông sản
+    </div>
+
+
+    <div class="productItem">
+
+        <div class="productEmoji">
+            🌾
+        </div>
+
+        <div class="productInfo">
+
+            <div class="productName">
+                Lúa mì
+            </div>
+
+            <div class="productCount">
+                Có:
+                <span id="wheatProduct">0</span>
+                · 15 🪙
+            </div>
+
+        </div>
+
+        <button
+            class="sellBtn"
+            data-product="wheat">
+
+            Bán
+
+        </button>
+
+    </div>
+
+
+    <div class="productItem">
+
+        <div class="productEmoji">
+            🌸
+        </div>
+
+        <div class="productInfo">
+
+            <div class="productName">
+                Hoa tulip hồng
+            </div>
+
+            <div class="productCount">
+                Có:
+                <span id="tulipProduct">0</span>
+                · 30 🪙
+            </div>
+
+        </div>
+
+        <button
+            class="sellBtn"
+            data-product="tulip">
+
+            Bán
+
+        </button>
+
+    </div>
+
+
+    <div class="productItem">
+
+        <div class="productEmoji">
+            🪴
+        </div>
+
+        <div class="productInfo">
+
+            <div class="productName">
+                Cây dương sỉ
+            </div>
+
+            <div class="productCount">
+                Có:
+                <span id="fernProduct">0</span>
+                · 45 🪙
+            </div>
+
+        </div>
+
+        <button
+            class="sellBtn"
+            data-product="fern">
+
+            Bán
+
+        </button>
+
+    </div>
+
+
+    <div class="productItem">
+
+        <div class="productEmoji">
+            🍎
+        </div>
+
+        <div class="productInfo">
+
+            <div class="productName">
+                Quả táo
+            </div>
+
+            <div class="productCount">
+                Có:
+                <span id="appleProduct">0</span>
+                · 70 🪙
+            </div>
+
+        </div>
+
+        <button
+            class="sellBtn"
+            data-product="apple">
+
+            Bán
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SHOP
+========================= -->
+
+<div id="shop">
+
+    <h3>🛒 Cửa hàng</h3>
+
+
+    <button
+        class="shopItem"
+        data-seed="wheat">
+
+        🌾 Cây lúa mì
+        <b>10 🪙</b>
+
+    </button>
+
+
+    <button
+        class="shopItem"
+        data-seed="tulip">
+
+        🌷 Hoa tulip hồng
+        <b>25 🪙</b>
+
+    </button>
+
+
+    <button
+        class="shopItem"
+        data-seed="fern">
+
+        🌿 Cây dương sỉ
+        <b>40 🪙</b>
+
+    </button>
+
+
+    <button
+        class="shopItem"
+        data-seed="apple">
+
+        🌳 Cây táo
+        <b>60 🪙</b>
+
+    </button>
+
+</div>
+
+
+<!-- =========================
+     THÔNG BÁO
+========================= -->
+
+<div id="message"></div>
+
+
+<!-- =========================
+     NHIỆM VỤ
+========================= -->
+
+<div class="quest"
+     id="quest">
+
+    <div class="questTitle"
+         id="questTitle">
+
+        🌾 Nhiệm vụ 1: Trồng 10 cây lúa mì
+
+    </div>
+
+    <div class="questProgress"
+         id="questProgress">
+
+        0 / 10
+
+    </div>
+
+    <div class="questReward"
+         id="questReward">
+
+        🎁 Hoàn thành nhận 100 xu
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     NÚT
+========================= -->
+
+<div class="actions">
+
+    <button
+        class="actionBtn"
+        id="inventoryBtn">
+
+        📦
+
+    </button>
+
+
+    <button
+        class="actionBtn"
+        id="shopBtn">
+
+        🛒
+
+    </button>
+
+
+    <button
+        class="actionBtn"
+        id="helpBtn">
+
+        ?
+
+    </button>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* ==================================================
+   DỮ LIỆU CÂY
+================================================== */
+
+const seedData={
+
+    wheat:{
+        name:"Cây lúa mì",
+        growing:"🌱 Cây lúa mì đang mọc",
+        emojiGrowing:"🌱",
+        emojiReady:"🌾",
+        product:"wheat",
+        time:60000,
+        exp:20,
+        unlock:1,
+        seedCost:10,
+        sellPrice:15
+    },
+
+    tulip:{
+        name:"Hoa tulip hồng",
+        growing:"🌷 Hoa tulip hồng đang mọc",
+        emojiGrowing:"🌷",
+        emojiReady:"🌸",
+        product:"tulip",
+        time:300000,
+        exp:25,
+        unlock:2,
+        seedCost:25,
+        sellPrice:30
+    },
+
+    fern:{
+        name:"Cây dương sỉ",
+        growing:"🌿 Cây dương sỉ đang mọc",
+        emojiGrowing:"🌿",
+        emojiReady:"🪴",
+        product:"fern",
+        time:600000,
+        exp:50,
+        unlock:3,
+        seedCost:40,
+        sellPrice:45
+    },
+
+    apple:{
+        name:"Cây táo",
+        growing:"🌳 Cây táo đang mọc",
+        emojiGrowing:"🌳",
+        emojiReady:"🍎",
+        product:"apple",
+        time:1800000,
+        exp:80,
+        unlock:4,
+        seedCost:60,
+        sellPrice:60
+    }
+
+};
+
+
+/* ==================================================
+   TRẠNG THÁI
+================================================== */
+
+let coins=100;
+
+let level=1;
+
+let exp=0;
+
+let selectedSeed="wheat";
+
+let selectedPlot=null;
+
+let mission=0;
+
+let wheatPlanted=0;
+
+let tulipPlanted=0;
+
+let coinsCollected=0;
+
+let missionReady=false;
+
+let missionCompleted=false;
+
+
+/* ==================================================
+   HẠT GIỐNG
+================================================== */
+
+const inventory={
+
+    /*
+       SỬA LỖI:
+       Cho sẵn 10 hạt lúa mì để có thể
+       hoàn thành nhiệm vụ đầu tiên.
+    */
+    wheat:10,
+
+    tulip:0,
+
+    fern:0,
+
+    apple:0
+
+};
+
+
+/* ==================================================
+   NÔNG SẢN
+================================================== */
+
+const products={
+
+    wheat:0,
+
+    tulip:0,
+
+    fern:0,
+
+    apple:0
+
+};
+
+
+/* ==================================================
+   RUỘNG
+================================================== */
+
+const state=[];
+
+const crop=[];
+
+const readyAt=[];
+
+
+for(let i=0;i<16;i++){
+
+    state[i]="empty";
+
+    crop[i]=null;
+
+    readyAt[i]=0;
+
+}
+
+
+/* ==================================================
+   EXP CẦN ĐỂ LÊN CẤP
+================================================== */
+
+function nextExp(lv){
+
+    if(lv===1) return 100;
+
+    if(lv===2) return 300;
+
+    if(lv===3) return 500;
+
+    if(lv===4) return 800;
+
+    if(lv===5) return 1200;
+
+    return 1200+(lv-5)*400;
+
+}
+
+
+/* ==================================================
+   CÂY MỞ Ở CẤP NÀO
+================================================== */
+
+function cropAtLevel(lv){
+
+    if(lv===1){
+
+        return {
+            emoji:"🌾",
+            name:"Cây lúa mì"
+        };
+
+    }
+
+    if(lv===2){
+
+        return {
+            emoji:"🌷",
+            name:"Hoa tulip hồng"
+        };
+
+    }
+
+    if(lv===3){
+
+        return {
+            emoji:"🌿",
+            name:"Cây dương sỉ"
+        };
+
+    }
+
+    if(lv===4){
+
+        return {
+            emoji:"🌳",
+            name:"Cây táo"
+        };
+
+    }
+
+    return null;
+
+}
+
+
+/* ==================================================
+   TẠO 16 Ô
+================================================== */
+
+const farm=
+    document.getElementById("farm");
+
+
+for(let i=0;i<16;i++){
+
+    const plot=
+        document.createElement("div");
+
+    plot.className="plot";
+
+    plot.dataset.index=i;
+
+    farm.appendChild(plot);
+
+
+    plot.addEventListener(
+        "click",
+        function(e){
+
+            e.stopPropagation();
+
+            handlePlot(i);
+
+        }
+    );
+
+}
+
+
+/* ==================================================
+   VẼ CÂY
+================================================== */
+
+function draw(index){
+
+    const plot=
+        farm.children[index];
+
+
+    plot.innerHTML="";
+
+    plot.classList.remove("ready");
+
+
+    if(
+        state[index]==="empty"
+    ){
+
+        return;
+
+    }
+
+
+    const type=
+        crop[index];
+
+
+    const data=
+        seedData[type];
+
+
+    const emoji=
+        document.createElement("div");
+
+
+    emoji.className="crop";
+
+
+    if(
+        state[index]==="growing"
+    ){
+
+        emoji.textContent=
+            data.emojiGrowing;
+
+    }
+
+    else if(
+        state[index]==="ready"
+    ){
+
+        emoji.textContent=
+            data.emojiReady;
+
+        plot.classList.add("ready");
+
+    }
+
+
+    plot.appendChild(emoji);
+
+
+    if(
+        state[index]==="growing"
+    ){
+
+        const text=
+            document.createElement("div");
+
+
+        text.className=
+            "growingText";
+
+
+        text.textContent=
+            "Đang mọc...";
+
+
+        plot.appendChild(text);
+
+    }
+
+}
+
+
+/* ==================================================
+   XỬ LÝ Ô
+================================================== */
+
+function handlePlot(index){
+
+    if(
+        state[index]==="growing"
+    ){
+
+        showGrowInfo(index);
+
+        return;
+
+    }
+
+
+    if(
+        state[index]==="ready"
+    ){
+
+        harvest(index);
+
+        return;
+
+    }
+
+
+    if(
+        state[index]==="empty"
+    ){
+
+        plant(index);
+
+    }
+
+}
+
+
+/* ==================================================
+   TRỒNG
+================================================== */
+
+function plant(index){
+
+    const type=
+        selectedSeed;
+
+
+    const data=
+        seedData[type];
+
+
+    if(
+        level<data.unlock
+    ){
+
+        showMessage(
+            "🔒 Cần cấp "+
+            data.unlock+
+            " để mở!"
+        );
+
+        return;
+
+    }
+
+
+    if(
+        inventory[type]<=0
+    ){
+
+        showMessage(
+            "🌱 Không có hạt giống!"
+        );
+
+        return;
+
+    }
+
+
+    inventory[type]--;
+
+
+    crop[index]=type;
+
+
+    state[index]="growing";
+
+
+    readyAt[index]=
+        Date.now()+
+        data.time;
+
+
+    if(
+        mission===0 &&
+        !missionCompleted &&
+        type==="wheat"
+    ){
+
+        wheatPlanted++;
+
+
+        if(
+            wheatPlanted>=10
+        ){
+
+            wheatPlanted=10;
+
+            missionReady=true;
+
+            showMessage(
+                "🎉 Đã trồng đủ 10 cây lúa mì! Bấm nhiệm vụ để nhận thưởng!"
+            );
+
+        }
+
+    }
+
+
+    if(
+        mission===1 &&
+        type==="tulip"
+    ){
+
+        tulipPlanted++;
+
+
+        if(
+            tulipPlanted>=10
+        ){
+
+            tulipPlanted=10;
+
+            missionReady=true;
+
+            showMessage(
+                "🎉 Đã trồng đủ 10 hoa tulip! Bấm nhiệm vụ để nhận thưởng!"
+            );
+
+        }
+
+    }
+
+
+    draw(index);
+
+    updateUI();
+
+    showGrowInfo(index);
+
+}
+
+
+/* ==================================================
+   THU HOẠCH
+================================================== */
+
+function harvest(index){
+
+    const type=
+        crop[index];
+
+
+    const data=
+        seedData[type];
+
+
+    products[data.product]++;
+
+
+    gainExp(data.exp);
+
+
+    state[index]="empty";
+
+    crop[index]=null;
+
+    readyAt[index]=0;
+
+
+    draw(index);
+
+    updateUI();
+
+    hideGrowInfo();
+
+
+    showMessage(
+        "📦 Thu hoạch "+
+        data.emojiReady+
+        " "+data.name+"!"
+    );
+
+}
+
+
+/* ==================================================
+   BÁN NÔNG SẢN
+================================================== */
+
+function sellProduct(type){
+
+    if(
+        products[type]<=0
+    ){
+
+        showMessage(
+            "📦 Không có sản phẩm này!"
+        );
+
+        return;
+
+    }
+
+
+    const data=
+        Object.values(seedData)
+        .find(
+            item=>
+                item.product===type
+        );
+
+
+    if(!data){
+
+        return;
+
+    }
+
+
+    products[type]--;
+
+    coins+=data.sellPrice;
+
+    coinsCollected+=data.sellPrice;
+
+
+    if(
+        mission===2 &&
+        coinsCollected>=300
+    ){
+
+        coinsCollected=300;
+
+        missionReady=true;
+
+        showMessage(
+            "🎉 Đã đủ 300 xu cho nhiệm vụ!"
+        );
+
+    }
+
+
+    updateUI();
+
+
+    showMessage(
+        "💰 Bán "+
+        data.name+
+        " được "+
+        data.sellPrice+
+        " xu!"
+    );
+
+}
+
+
+/* ==================================================
+   NÚT BÁN
+================================================== */
+
+document
+.querySelectorAll(".sellBtn")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        function(e){
+
+            e.stopPropagation();
+
+            sellProduct(
+                button.dataset.product
+            );
+
+        }
+    );
+
+});
+
+
+/* ==================================================
+   TIMER
+================================================== */
+
+function showGrowInfo(index){
+
+    selectedPlot=index;
+
+
+    const plot=
+        farm.children[index];
+
+
+    const rect=
+        plot.getBoundingClientRect();
+
+
+    const info=
+        document.getElementById(
+            "growInfo"
+        );
+
+
+    info.style.left=
+        (
+            rect.left+
+            rect.width/2
+        )+"px";
+
+
+    info.style.top=
+        Math.max(
+            105,
+            rect.top-115
+        )+"px";
+
+
+    info.style.transform=
+        "translateX(-50%)";
+
+
+    info.classList.add("show");
+
+
+    updateGrowInfo();
+
+}
+
+
+/* ==================================================
+   THỜI GIAN
+================================================== */
+
+function formatTime(ms){
+
+    const total=
+        Math.ceil(ms/1000);
+
+
+    const minutes=
+        Math.floor(total/60);
+
+
+    const seconds=
+        total%60;
+
+
+    if(minutes>0){
+
+        if(seconds>0){
+
+            return "Còn "+
+                minutes+
+                " phút "+
+                seconds+
+                " giây";
+
+        }
+
+        return "Còn "+
+            minutes+
+            " phút";
+
+    }
+
+
+    return "Còn "+
+        seconds+
+        " giây";
+
+}
+
+
+/* ==================================================
+   UPDATE TIMER
+================================================== */
+
+function updateGrowInfo(){
+
+    if(
+        selectedPlot===null
+    ){
+
+        return;
+
+    }
+
+
+    const index=
+        selectedPlot;
+
+
+    if(
+        state[index]!=="growing"
+    ){
+
+        hideGrowInfo();
+
+        return;
+
+    }
+
+
+    const type=
+        crop[index];
+
+
+    const data=
+        seedData[type];
+
+
+    const total=
+        data.time;
+
+
+    const left=
+        Math.max(
+            0,
+            readyAt[index]-
+            Date.now()
+        );
+
+
+    document
+    .getElementById("growTitle")
+    .textContent=
+        data.growing;
+
+
+    document
+    .getElementById("growTime")
+    .textContent=
+        formatTime(left);
+
+
+    const percent=
+        ((total-left)/total)*100;
+
+
+    document
+    .getElementById("growProgress")
+    .style.width=
+        Math.min(
+            100,
+            percent
+        )+"%";
+
+
+    if(
+        left<=0
+    ){
+
+        state[index]="ready";
+
+
+        draw(index);
+
+
+        hideGrowInfo();
+
+
+        showMessage(
+            data.emojiReady+
+            " "+data.name+
+            " đã trưởng thành!"
+        );
+
+    }
+
+}
+
+
+/* ==================================================
+   EXP
+================================================== */
+
+function gainExp(amount){
+
+    exp+=amount;
+
+
+    while(
+        exp>=nextExp(level)
+    ){
+
+        exp-=nextExp(level);
+
+        level++;
+
+
+        showMessage(
+            "🎉 Lên cấp "+
+            level+
+            "!"
+        );
+
+    }
+
+
+    updateUI();
+
+}
+
+
+/* ==================================================
+   CẬP NHẬT KHO
+================================================== */
+
+function updateInventory(){
+
+    document
+    .getElementById("wheatSeed")
+    .textContent=
+        inventory.wheat;
+
+
+    document
+    .getElementById("tulipSeed")
+    .textContent=
+        inventory.tulip;
+
+
+    document
+    .getElementById("fernSeed")
+    .textContent=
+        inventory.fern;
+
+
+    document
+    .getElementById("appleSeed")
+    .textContent=
+        inventory.apple;
+
+
+    document
+    .getElementById("wheatProduct")
+    .textContent=
+        products.wheat;
+
+
+    document
+    .getElementById("tulipProduct")
+    .textContent=
+        products.tulip;
+
+
+    document
+    .getElementById("fernProduct")
+    .textContent=
+        products.fern;
+
+
+    document
+    .getElementById("appleProduct")
+    .textContent=
+        products.apple;
+
+
+    document
+    .querySelectorAll(".sellBtn")
+    .forEach(button=>{
+
+        const type=
+            button.dataset.product;
+
+
+        button.disabled=
+            products[type]<=0;
+
+    });
+
+
+    document
+    .querySelectorAll(".seedChoice")
+    .forEach(button=>{
+
+        const type=
+            button.dataset.seed;
+
+
+        button.classList.toggle(
+            "selected",
+            type===selectedSeed
+        );
+
+
+        button.classList.toggle(
+            "locked",
+            level<
+            seedData[type].unlock
+        );
+
+    });
+
+}
+
+
+/* ==================================================
+   CẬP NHẬT NHIỆM VỤ
+================================================== */
+
+function updateQuest(){
+
+    const title=
+        document.getElementById(
+            "questTitle"
+        );
+
+    const progress=
+        document.getElementById(
+            "questProgress"
+        );
+
+    const reward=
+        document.getElementById(
+            "questReward"
+        );
+
+    const quest=
+        document.getElementById(
+            "quest"
+        );
+
+
+    if(
+        mission===0
+    ){
+
+        title.textContent=
+            "🌾 Nhiệm vụ 1: Trồng 10 cây lúa mì";
+
+        progress.textContent=
+            wheatPlanted+" / 10";
+
+        reward.textContent=
+            missionReady
+            ? "🎁 Bấm để nhận 100 xu!"
+            : "🎁 Hoàn thành nhận 100 xu";
+
+    }
+
+
+    else if(
+        mission===1
+    ){
+
+        title.textContent=
+            "🌷 Nhiệm vụ 2: Trồng 10 hoa tulip";
+
+        progress.textContent=
+            tulipPlanted+" / 10";
+
+        reward.textContent=
+            missionReady
+            ? "🎁 Bấm để nhận 150 xu!"
+            : "🎁 Hoàn thành nhận 150 xu";
+
+    }
+
+
+    else if(
+        mission===2
+    ){
+
+        title.textContent=
+            "🪙 Nhiệm vụ 3: Kiếm 300 xu";
+
+        progress.textContent=
+            coinsCollected+" / 300";
+
+        reward.textContent=
+            missionReady
+            ? "🎁 Bấm để nhận 250 xu!"
+            : "🎁 Hoàn thành nhận 250 xu";
+
+    }
+
+
+    else{
+
+        title.textContent=
+            "🏆 Đã hoàn thành tất cả nhiệm vụ!";
+
+        progress.textContent=
+            "Hoàn thành";
+
+        reward.textContent=
+            "🎉 Tuyệt vời!";
+
+        quest.classList.add("completed");
+
+        return;
+
+    }
+
+
+    quest.classList.toggle(
+        "completed",
+        missionReady
+    );
+
+}
+
+
+/* ==================================================
+   NHẬN THƯỞNG NHIỆM VỤ
+================================================== */
+
+function completeMission(){
+
+    if(
+        !missionReady
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        mission===0
+    ){
+
+        coins+=100;
+
+        mission=1;
+
+        missionReady=false;
+
+        wheatPlanted=0;
+
+        showMessage(
+            "🎁 Hoàn thành nhiệm vụ! +100 xu"
+        );
+
+    }
+
+    else if(
+        mission===1
+    ){
+
+        coins+=150;
+
+        mission=2;
+
+        missionReady=false;
+
+        tulipPlanted=0;
+
+        showMessage(
+            "🎁 Hoàn thành nhiệm vụ! +150 xu"
+        );
+
+    }
+
+    else if(
+        mission===2
+    ){
+
+        coins+=250;
+
+        mission=3;
+
+        missionReady=false;
+
+        showMessage(
+            "🏆 Hoàn thành nhiệm vụ cuối! +250 xu"
+        );
+
+    }
+
+
+    updateUI();
+
+}
+
+
+/* ==================================================
+   CLICK NHIỆM VỤ
+================================================== */
+
+document
+.getElementById("quest")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+        if(
+            missionReady
+        ){
+
+            completeMission();
+
+        }
+
+        else{
+
+            if(
+                mission===0
+            ){
+
+                showMessage(
+                    "🌾 Hãy trồng đủ 10 cây lúa mì!"
+                );
+
+            }
+
+            else if(
+                mission===1
+            ){
+
+                showMessage(
+                    "🌷 Hãy trồng đủ 10 hoa tulip!"
+                );
+
+            }
+
+            else if(
+                mission===2
+            ){
+
+                showMessage(
+                    "🪙 Hãy kiếm đủ 300 xu!"
+                );
+
+            }
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   UPDATE UI
+================================================== */
+
+function updateUI(){
+
+    document
+    .getElementById("coins")
+    .textContent=
+        coins;
+
+
+    document
+    .getElementById("level")
+    .textContent=
+        level;
+
+
+    document
+    .getElementById("expText")
+    .textContent=
+        exp;
+
+
+    document
+    .getElementById("nextExp")
+    .textContent=
+        nextExp(level);
+
+
+    document
+    .getElementById("xpBar")
+    .style.width=
+        Math.min(
+            100,
+            exp/
+            nextExp(level)*
+            100
+        )+"%";
+
+
+    updateInventory();
+
+    updateQuest();
+
+}
+
+
+/* ==================================================
+   CHỌN HẠT GIỐNG
+================================================== */
+
+document
+.querySelectorAll(".seedChoice")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        function(e){
+
+            e.stopPropagation();
+
+
+            const type=
+                button.dataset.seed;
+
+
+            const data=
+                seedData[type];
+
+
+            if(
+                level<data.unlock
+            ){
+
+                showMessage(
+                    "🔒 "+data.name+
+                    " mở ở cấp "+
+                    data.unlock+"!"
+                );
+
+                return;
+
+            }
+
+
+            if(
+                inventory[type]<=0
+            ){
+
+                showMessage(
+                    "🌱 Bạn chưa có hạt "+
+                    data.name+"!"
+                );
+
+                return;
+
+            }
+
+
+            selectedSeed=type;
+
+
+            updateUI();
+
+
+            showMessage(
+                "🌱 Đã chọn "+
+                data.name+
+                " để trồng!"
+            );
+
+        }
+    );
+
+});
+
+
+/* ==================================================
+   CỬA HÀNG
+================================================== */
+
+document
+.querySelectorAll(".shopItem")
+.forEach(button=>{
+
+    button.addEventListener(
+        "click",
+        function(e){
+
+            e.stopPropagation();
+
+
+            const type=
+                button.dataset.seed;
+
+
+            const data=
+                seedData[type];
+
+
+            if(
+                level<data.unlock
+            ){
+
+                showMessage(
+                    "🔒 Mở ở cấp "+
+                    data.unlock+"!"
+                );
+
+                return;
+
+            }
+
+
+            if(
+                coins<data.seedCost
+            ){
+
+                showMessage(
+                    "😅 Không đủ xu!"
+                );
+
+                return;
+
+            }
+
+
+            coins-=data.seedCost;
+
+
+            inventory[type]++;
+
+
+            selectedSeed=type;
+
+
+            updateUI();
+
+
+            showMessage(
+                "🛒 Đã mua 1 "+
+                data.name+
+                " và chọn nó để trồng!"
+            );
+
+        }
+    );
+
+});
+
+
+/* ==================================================
+   NÚT KHO
+================================================== */
+
+document
+.getElementById("inventoryBtn")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+
+        document
+        .getElementById("shop")
+        .classList
+        .remove("show");
+
+
+        document
+        .getElementById("levelInfo")
+        .classList
+        .remove("show");
+
+
+        document
+        .getElementById("inventory")
+        .classList
+        .toggle("show");
+
+    }
+);
+
+
+/* ==================================================
+   ĐÓNG KHO
+================================================== */
+
+document
+.getElementById("inventoryClose")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+
+        document
+        .getElementById("inventory")
+        .classList
+        .remove("show");
+
+    }
+);
+
+
+/* ==================================================
+   NÚT SHOP
+================================================== */
+
+document
+.getElementById("shopBtn")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+
+        document
+        .getElementById("inventory")
+        .classList
+        .remove("show");
+
+
+        document
+        .getElementById("levelInfo")
+        .classList
+        .remove("show");
+
+
+        document
+        .getElementById("shop")
+        .classList
+        .toggle("show");
+
+    }
+);
+
+
+/* ==================================================
+   BẤM EXP / CẤP
+================================================== */
+
+document
+.getElementById("levelBox")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+
+        const info=
+            document.getElementById(
+                "levelInfo"
+            );
+
+
+        const title=
+            document.getElementById(
+                "levelInfoTitle"
+            );
+
+
+        const text=
+            document.getElementById(
+                "levelInfoText"
+            );
+
+
+        const nextCrop=
+            cropAtLevel(
+                level+1
+            );
+
+
+        if(nextCrop){
+
+            const needed=
+                nextExp(level)-
+                exp;
+
+
+            title.textContent=
+                "⬆️ Cấp "+(level+1)+
+                " sẽ mở";
+
+
+            text.innerHTML=
+                nextCrop.emoji+
+                " <b>"+
+                nextCrop.name+
+                "</b><br>"+
+                "Cần thêm <b>"+
+                needed+
+                " EXP</b>";
+
+        }
+
+        else{
+
+            title.textContent=
+                "🏆 Bạn đã mở hết cây!";
+
+
+            text.innerHTML=
+                "Hiện tại chưa có cây mới ở cấp tiếp theo.";
+
+        }
+
+
+        info.classList.toggle("show");
+
+    }
+);
+
+
+/* ==================================================
+   HELP
+================================================== */
+
+document
+.getElementById("helpBtn")
+.addEventListener(
+    "click",
+    function(e){
+
+        e.stopPropagation();
+
+
+        showMessage(
+            "📦 Mua hạt → mở kho → chọn loại → trồng → thu hoạch → bán!"
+        );
+
+    }
+);
+
+
+/* ==================================================
+   CLICK NGOÀI
+================================================== */
+
+document
+.getElementById("game")
+.addEventListener(
+    "click",
+    function(e){
+
+        if(
+            !e.target.closest(".plot")
+        ){
+
+            hideGrowInfo();
+
+        }
+
+
+        if(
+            !e.target.closest("#inventory") &&
+            !e.target.closest("#inventoryBtn")
+        ){
+
+            document
+            .getElementById("inventory")
+            .classList
+            .remove("show");
+
+        }
+
+
+        if(
+            !e.target.closest("#shop") &&
+            !e.target.closest("#shopBtn")
+        ){
+
+            document
+            .getElementById("shop")
+            .classList
+            .remove("show");
+
+        }
+
+
+        if(
+            !e.target.closest("#levelBox") &&
+            !e.target.closest("#levelInfo")
+        ){
+
+            document
+            .getElementById("levelInfo")
+            .classList
+            .remove("show");
+
+        }
+
+    }
+);
+
+
+/* ==================================================
+   ẨN TIMER
+================================================== */
+
+function hideGrowInfo(){
+
+    selectedPlot=null;
+
+
+    document
+    .getElementById("growInfo")
+    .classList
+    .remove("show");
+
+}
+
+
+/* ==================================================
+   THÔNG BÁO
+================================================== */
+
+let messageTimer=null;
+
+
+function showMessage(text){
+
+    const box=
+        document.getElementById(
+            "message"
+        );
+
+
+    box.textContent=text;
+
+
+    box.classList.add("show");
+
+
+    clearTimeout(messageTimer);
+
+
+    messageTimer=
+        setTimeout(
+            function(){
+
+                box.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* ==================================================
+   GAME LOOP
+================================================== */
+
+setInterval(
+    function(){
+
+        for(
+            let i=0;
+            i<16;
+            i++
+        ){
+
+            if(
+                state[i]==="growing" &&
+                Date.now()>=readyAt[i]
+            ){
+
+                state[i]="ready";
+
+                draw(i);
+
+            }
+
+        }
+
+
+        if(
+            selectedPlot!==null
+        ){
+
+            updateGrowInfo();
+
+        }
+
+    },
+    250
+);
+
+
+/* ==================================================
+   KHỞI TẠO
+================================================== */
+
+for(
+    let i=0;
+    i<16;
+    i++
+){
+
+    draw(i);
+
+}
+
+updateUI();
+
+</script>
+
+</body>
+</html>
