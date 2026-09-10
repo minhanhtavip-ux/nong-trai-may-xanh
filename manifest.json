@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Nông Trại Mây Xanh",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Nông Trại Mây Xanh",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "nong-trai-may-xanh",
+  "description": "Nông trại vui nhộn với trải nghiệm trồng trọt thú vị"
+}
